@@ -136,6 +136,7 @@ if(ARROW_BUILD_TESTS OR ARROW_BUILD_EXAMPLES)
                  ${ARROW_FLIGHT_SQL_TEST_LIBS}
                  EXTRA_INCLUDES
                  "${CMAKE_CURRENT_BINARY_DIR}/../"
+                 ${SQLite3_INCLUDE_DIRS}
                  LABELS
                  "arrow_flight_sql")
 
@@ -144,10 +145,12 @@ if(ARROW_BUILD_TESTS OR ARROW_BUILD_EXAMPLES)
   target_link_libraries(flight-sql-test-server
                         PRIVATE ${ARROW_FLIGHT_SQL_TEST_LINK_LIBS} ${GFLAGS_LIBRARIES}
                                 ${SQLite3_LIBRARIES})
+  target_include_directories(flight-sql-test-server PRIVATE ${SQLite3_INCLUDE_DIRS})
 
   add_executable(flight-sql-test-app test_app_cli.cc)
   target_link_libraries(flight-sql-test-app PRIVATE ${ARROW_FLIGHT_SQL_TEST_LINK_LIBS}
                                                     ${GFLAGS_LIBRARIES})
+  target_include_directories(flight-sql-test-app PRIVATE ${SQLite3_INCLUDE_DIRS})
 
   if(ARROW_FLIGHT_TEST_LINKAGE STREQUAL "static" AND ARROW_BUILD_STATIC)
     foreach(TEST_TARGET arrow-flight-sql-test flight-sql-test-server flight-sql-test-app)
